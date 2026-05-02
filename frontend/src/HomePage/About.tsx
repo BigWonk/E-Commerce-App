@@ -1,33 +1,11 @@
-import React, { useEffect, useState } from "react";
-import "./Account.css";
+import React from "react";
+import "./About.css";
 import { Link, useNavigate } from "react-router-dom";
 
-export default function Account() {
-  const [name,setName ] = useState("")
-  const [email,setEmail ] = useState("")
-  const navigate = useNavigate();
-  useEffect(() => {
-    const dataFetch = async() =>
-    {
-        const res = await fetch("http://localhost:3001/api/auth/me", {
-        credentials: "include",
-    });
-        const user = await res.json();
-        setName(user.name)
-        setEmail(user.email)
-    }
-    dataFetch();
-},[])
-const logOut = async() =>
-{
-    const res = await fetch("http://localhost:3001/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-    });
-    navigate("/");
-
-}
-const CheckSession = () =>
+export function About() {
+ 
+ const navigate = useNavigate();
+  const CheckSession = () =>
 {
     const checkAuth = async () => {
       const data = await fetch("http://localhost:3001/api/auth/verify",
@@ -65,10 +43,12 @@ const CheckSessionContact = () =>
     }
     checkAuth();
 }
-    
-    return (
+ 
+  return (
+   
    <div>
-    <header className="navbar">
+   
+         <header className="navbar">
            <div className="logo">YourLogo</div>
            <nav>
              <ul>
@@ -88,36 +68,34 @@ const CheckSessionContact = () =>
              <button>Cart(0)</button>
            </div>
          </header>
-   <div className="account-container">
-      <div className="account-box">
+   <div className="about-container">
 
-        <div className="account-header">
-        
-          <h2>{name}</h2>
-          <p>{email}</p>
-        </div>
+      
+      
+      <div className="about-box">
+        <h1>About Us</h1>
+        <p>
+          Welcome to ShopX – your one-stop destination for quality products at unbeatable prices.
+          We are passionate about delivering the best online shopping experience with a wide
+          selection of products, fast delivery, and excellent customer service.
+        </p>
 
-        <div className="account-section">
-          <h3>Account Details</h3>
-
-          <div className="info-row">
-            <span>Name:</span>
-            <span>{name}</span>
+        <div className="about-grid">
+          <div className="about-card">
+            <h3>Our Mission</h3>
+            <p>To make online shopping simple, fast, and accessible for everyone.</p>
           </div>
 
-          <div className="info-row">
-            <span>Email:</span>
-            <span>{email}</span>
+          <div className="about-card">
+            <h3>Our Vision</h3>
+            <p>To become a trusted global e-commerce platform.</p>
+          </div>
+
+          <div className="about-card">
+            <h3>Why Choose Us</h3>
+            <p>High quality products, secure payments, and fast delivery.</p>
           </div>
         </div>
-
-        <div className="account-section">
-          <h3>Actions</h3>
-          <button className="bttn" onClick={() => navigate("/account/orders")}>View Orders</button>
-          <button className="btnlogout" onClick={logOut}>Logout</button>
-          
-        </div>
-
       </div>
     </div>
     </div>

@@ -9,6 +9,7 @@ import authRoutes from "./routes/auth.js";
 import productRoutes from "./routes/product.js";
 import cartRoutes from "./routes/cart.js";
 import orderRoutes from "./routes/orders.js";
+import messageRoutes from "./routes/messages.js";
 
 
 doetenv.config()
@@ -38,6 +39,7 @@ app.use("/api/auth", authRoutes)
 app.use("/api/products", productRoutes)
 app.use("/api/cart", cartRoutes)
 app.use("/api/orders", orderRoutes)
+app.use("/api/message", messageRoutes)
 
 
 app.listen(port, (req,res) =>

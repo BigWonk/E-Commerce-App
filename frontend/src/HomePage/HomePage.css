@@ -82,6 +82,10 @@ body {
 .navbar .search-account-cart button:hover {
   background-color: #0056b3;
 }
+.navbar .InputText
+{
+  margin-left: 10px;
+}
 
 /* Hero Section */
 .hero-section {
@@ -305,4 +309,5 @@ body {
   .footer-links div {
     margin-bottom: 25px;
   }
+
 }

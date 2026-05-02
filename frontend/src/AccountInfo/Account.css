@@ -57,7 +57,7 @@
   border-bottom: 1px solid #eee;
 }
 
-.btn {
+.bttn {
   width: 100%;
   padding: 10px;
   margin-top: 10px;
@@ -69,14 +69,24 @@
   transition: 0.3s;
 }
 
-.btn:hover {
+.bttn:hover {
   background: #ff9900;
 }
 
-.logout {
+.btnlogout {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 6px;
+  background: #111;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+  
   background: #d9534f;
 }
 
-.logout:hover {
+.btnlogout:hover {
   background: #c9302c;
 }

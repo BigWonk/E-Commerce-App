@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./HomePage.css"
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface Product {
   id?: string;
@@ -39,7 +40,26 @@ const CheckSession = () =>
       }
       else
       {
-        navigate("account")
+        navigate("/account")
+      }
+    }
+    checkAuth();
+}
+const CheckSessionContact = () =>
+{
+    const checkAuth = async () => {
+      const data = await fetch("http://localhost:3001/api/auth/verify",
+        {
+          credentials: "include"
+        }
+      )
+      if(data.status === 401)
+      {
+        navigate("/login")
+      }
+      else
+      {
+        navigate("/contacts")
       }
     }
     checkAuth();
@@ -56,12 +76,16 @@ const CheckSession = () =>
           <ul>
             <li><a href="/">Home</a></li>
             <li><a href="#">Shop</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href="/about">About Us</a></li>
+            <li>
+            <Link to="/contacts" onClick={CheckSessionContact}>
+            Contact
+            </Link>
+           </li>
           </ul>
         </nav>
         <div className="search-account-cart">
-          <input type="text" placeholder="Search products..." />
+          <input type="text" placeholder="Search products..." className="InputText" />
           <button onClick={CheckSession}>Account</button>
           <button>Cart(0)</button>
         </div>
