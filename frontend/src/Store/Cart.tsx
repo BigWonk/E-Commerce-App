@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Cart.css";
+import { useNavigate } from "react-router-dom";
 interface Product {
   id?: string;
   name: string;
@@ -11,7 +12,9 @@ interface Product {
 
 export default function Cart() {
   const [cartItem, setCartItem] = useState<Product[]>([]);
+  const navigate = useNavigate();
   useEffect(() => {
+    
     const getData = async () =>
     {
         const result = await fetch("http://localhost:3001/api/cart/get",{
@@ -109,7 +112,7 @@ export default function Cart() {
             <span>Total:</span>
             <strong>${total.toFixed(2)}</strong>
           </div>
-          <button className="checkout-btn">Checkout</button>
+          <button className="checkout-btn" onClick={() =>navigate("/checkout") }>Checkout</button>
         </div>
       </div>
     </div>

@@ -57,7 +57,7 @@ export default function Store() {
   const CheckSession = () =>
 {
     const checkAuth = async () => {
-      const data = await fetch("",
+      const data = await fetch("http://localhost:3001/api/auth/verify",
         {
           credentials: "include"
         }
