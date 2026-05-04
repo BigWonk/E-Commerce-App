@@ -7,6 +7,8 @@ import Account from './AccountInfo/Account';
 import Orders from './AccountInfo/Orders';
 import { About } from './HomePage/About';
 import { Contact } from './HomePage/Contacts';
+import Store from './Store/Store';
+import Cart from './Store/Cart';
 function App() {
   
 
@@ -20,6 +22,8 @@ function App() {
       <Route path='/account/orders' element = {<Orders></Orders>}></Route>
       <Route path='/about' element = {<About></About>}></Route>
       <Route path='/contacts' element = {<Contact></Contact>}></Route> 
+       <Route path='/store' element = {<Store></Store>}></Route> 
+       <Route path='/cart' element = {<Cart></Cart>}></Route> 
 
     </Routes>
       

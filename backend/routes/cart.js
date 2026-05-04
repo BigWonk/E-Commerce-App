@@ -19,13 +19,42 @@ router.post("/add", protect, async (req, res) => {
     return res.status(500).json({message: "Error while posting a cart"})
     } 
 });
+
+router.post("/update", protect, async (req, res) => {
+    try 
+    {
+  const userId = req.user.id; 
+  const { product_id, quantity } = req.body;
+  await pool.query("UPDATE cart SET quantity = $1 WHERE user_id = $2 AND product_id = $3",[quantity, userId, product_id]);
+  const result = await pool.query(`SELECT p.*, SUM(c.quantity) AS quantity FROM cart c JOIN products p ON p.id = c.product_id WHERE c.user_id = $1 GROUP BY p.id`,[userId])
+  res.status(200).json({ cart: result.rows });
+    } 
+    catch (error) 
+    {
+    console.log(error)
+    return res.status(500).json({message: "Error while updating a cart"})
+    } 
+});
+
 router.get("/get", protect, async(req,res) =>
 {
    try 
    {
     const userId = req.user.id;
-    const result = await pool.query("SELECT * FROM cart WHERE user_id = $1", [userId]) 
-    return res.status(200).json({user: result.rows})
+    const results = await pool.query(
+      `SELECT p.*, SUM(c.quantity) AS quantity
+       FROM cart c
+       JOIN products p ON p.id = c.product_id
+       WHERE c.user_id = $1
+       GROUP BY p.id`,
+      [userId]
+    );
+
+    if (results.rows.length === 0) {
+      return res.status(404).json({message: `You haven't made any orders!`});
+    }
+
+    return res.status(200).json({user: results.rows});
 
    } 
    catch (error) 
@@ -34,18 +63,20 @@ router.get("/get", protect, async(req,res) =>
         return res.status(500).json({message: "Error while getting a cart"})
    }
 })
-router.delete("/:id", async(req,res) =>
+router.delete("/delete/:id", protect, async(req,res) =>
 {
     try 
     {
-        const id = req.params.id;
-        const result = await pool.query("DELETE FROM cart WHERE id = $1", [id])
-        return res.status(404).json({message: "Succesfully cleared your cart"})
+        const userId = req.user.id;
+        const product_id = req.params.id;
+        await pool.query("DELETE FROM cart WHERE user_id = $1 AND product_id = $2", [userId, product_id])
+        const result = await pool.query(`SELECT p.*, SUM(c.quantity) AS quantity FROM cart c JOIN products p ON p.id = c.product_id WHERE c.user_id = $1 GROUP BY p.id`,[userId])
+        return res.status(200).json({cart: result.rows})
     } 
     catch (error) 
     {
         console.log(error)
-        return res.status(500).json({message: "Error while getting a cart"})
+        return res.status(500).json({message: "Error while deleting an item"})
     }
 })
 

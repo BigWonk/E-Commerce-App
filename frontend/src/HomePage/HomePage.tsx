@@ -63,7 +63,28 @@ const CheckSessionContact = () =>
       }
     }
     checkAuth();
+  }
+  const CheckSessionCart = () =>
+{
+    const checkAuth = async () => {
+      const data = await fetch("http://localhost:3001/api/auth/verify",
+        {
+          credentials: "include"
+        }
+      )
+      if(data.status === 401)
+      {
+        navigate("/login")
+      }
+      else
+      {
+        navigate("/cart")
+      }
+    }
+    checkAuth();
 }
+
+
 
   
   
@@ -75,7 +96,7 @@ const CheckSessionContact = () =>
         <nav>
           <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="#">Shop</a></li>
+            <li><a href="/store">Shop</a></li>
             <li><a href="/about">About Us</a></li>
             <li>
             <Link to="/contacts" onClick={CheckSessionContact}>
@@ -87,7 +108,7 @@ const CheckSessionContact = () =>
         <div className="search-account-cart">
           <input type="text" placeholder="Search products..." className="InputText" />
           <button onClick={CheckSession}>Account</button>
-          <button>Cart(0)</button>
+          <button onClick ={CheckSessionCart}>Cart(0)</button>
         </div>
       </header>
 
@@ -101,39 +122,7 @@ const CheckSessionContact = () =>
       </section>
 
      
-      <section className="featured-products">
-        <h2>Featured Products</h2>
-        <div className="product-grid">
-         {items.map((p, index) => (
-            <div key={index} className="product-card">
-              <h3>{p.name}</h3>
-              <p>${p.price}</p>
-              <p>{p.category}</p>
-              <button>Add to Cart</button>
-            </div>
-          ))}
-          
-        </div>
-      </section>
 
-     
-      <section className="new-arrival">
-        <h2>New Arrivals</h2>
-        <div className="product-grid">
-          {items.length > 0 ? (
-            <div className="product-card">
-              <h3>{items[items.length- 1].name}</h3>
-              <p>${items[items.length - 1].price}</p>
-              <button>Add to Cart</button>
-            </div>
-          ) : (
-            <div className="product-card">
-              <h3>Loading...</h3>
-              <p>Please wait while products load.</p>
-            </div>
-          )}
-        </div>
-      </section>
 
   
       <footer className="footer">
