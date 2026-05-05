@@ -6,8 +6,22 @@ import { Link } from "react-router-dom";
 export default function HomePage() 
 {
   const [name, setName] = useState("");
+  const [count, setCount] = useState();
   const navigate = useNavigate();
  
+  useEffect(() => {
+    const data = async() =>
+    {
+       const resultCount = await fetch("http://localhost:3001/api/cart/count",{
+            credentials: "include"
+        });
+            const jsonCount = await resultCount.json();
+             const productsCount = Array.isArray(jsonCount.count) ? jsonCount.count : [];
+            setCount(productsCount[0]?.sum || 0)
+    }
+    data()
+  }, [])
+
 const CheckSession = () =>
 {
     const checkAuth = async () => {
@@ -99,7 +113,7 @@ const CheckSessionContact = () =>
     }
   }} />
           <button onClick={CheckSession}>Account</button>
-          <button onClick ={CheckSessionCart}>Cart(0)</button>
+          <button onClick ={CheckSessionCart}>Cart({count})</button>
         </div>
       </header>
 

@@ -20,6 +20,7 @@ export default function Orders() {
   const [items, setItems] = useState<Item[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [name, setName] = useState("");
+  const [count, setCount] = useState();
 
   const navigate = useNavigate();
   useEffect(() =>
@@ -46,6 +47,12 @@ export default function Orders() {
             }
             const itemss = Array.isArray(jsonItems.items) ? jsonItems.items : [];
             setItems(itemss);
+             const resultCount = await fetch("http://localhost:3001/api/cart/count",{
+            credentials: "include"
+        });
+            const jsonCount = await resultCount.json();
+             const productsCount = Array.isArray(jsonCount.count) ? jsonCount.count : [];
+            setCount(productsCount[0]?.sum || 0)
     }
     getData();
     }, [])
@@ -138,7 +145,7 @@ const CheckSessionContact = () =>
           }
         }} />
                 <button onClick={CheckSession}>Account</button>
-                <button onClick ={CheckSessionCart}>Cart(0)</button>
+                <button onClick ={CheckSessionCart}>Cart({count})</button>
               </div>
             </header>
     <div className="orders-container">

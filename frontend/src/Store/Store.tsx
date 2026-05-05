@@ -33,6 +33,12 @@ export default function Store() {
         const json = await data.json();
         const products = Array.isArray(json.product) ? json.product : [];
         setItems(products);
+         const resultCount = await fetch("http://localhost:3001/api/cart/count",{
+            credentials: "include"
+        });
+            const jsonCount = await resultCount.json();
+             const productsCount = Array.isArray(jsonCount.count) ? jsonCount.count : [];
+            setCount(productsCount[0]?.sum || 0)
       }
       else
       {
@@ -65,9 +71,12 @@ export default function Store() {
             if(data.status != 401 && data.status != 500)
             {
             console.log(count)
-            setCount((prev) => prev + 1 );
-            console.log(count)
-            console.log("Item added to cart");
+            const resultCount = await fetch("http://localhost:3001/api/cart/count",{
+            credentials: "include"
+        });
+            const jsonCount = await resultCount.json();
+             const productsCount = Array.isArray(jsonCount.count) ? jsonCount.count : [];
+            setCount(productsCount[0]?.sum || 0)
             }
         };
 

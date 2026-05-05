@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./About.css";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -6,7 +6,23 @@ export function About() {
  
  const navigate = useNavigate();
   const [name, setName] = useState("");
- const CheckSession = () =>
+  const [count, setCount] = useState();
+ 
+ useEffect(() => 
+{
+  const data = async() =>
+  {
+     const resultCount = await fetch("http://localhost:3001/api/cart/count",{
+            credentials: "include"
+        });
+            const jsonCount = await resultCount.json();
+             const productsCount = Array.isArray(jsonCount.count) ? jsonCount.count : [];
+            setCount(productsCount[0]?.sum || 0)
+  }
+  data()
+}, [])
+ 
+  const CheckSession = () =>
 {
     const checkAuth = async () => {
       const data = await fetch("http://localhost:3001/api/auth/verify",
@@ -93,7 +109,7 @@ const CheckSessionContact = () =>
              }
            }} />
                    <button onClick={CheckSession}>Account</button>
-                   <button onClick ={CheckSessionCart}>Cart(0)</button>
+                   <button onClick ={CheckSessionCart}>Cart({count})</button>
                  </div>
                </header>
    <div className="about-container">

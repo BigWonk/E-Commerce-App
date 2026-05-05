@@ -14,6 +14,7 @@ export default function Cart() {
   const [cartItem, setCartItem] = useState<Product[]>([]);
   const navigate = useNavigate();
   const [name, setName] = useState("");  
+  const [count, setCount] = useState();
   useEffect(() => {
     
     const getData = async () =>
@@ -24,6 +25,12 @@ export default function Cart() {
             const json = await result.json();
             const products = Array.isArray(json.user) ? json.user : [];
             setCartItem(products)
+          const resultCount = await fetch("http://localhost:3001/api/cart/count",{
+            credentials: "include"
+        });
+            const jsonCount = await resultCount.json();
+             const productsCount = Array.isArray(jsonCount.count) ? jsonCount.count : [];
+            setCount(productsCount[0]?.sum || 0)
     }
     getData();
   },[])
@@ -41,8 +48,16 @@ export default function Cart() {
             const json = await data.json();
             const products = Array.isArray(json.cart) ? json.cart : [];
             setCartItem(products)
+            
+            const resultCount = await fetch("http://localhost:3001/api/cart/count",{
+                credentials: "include"
+            });
+            const jsonCount = await resultCount.json();
+            const productsCount = Array.isArray(jsonCount.count) ? jsonCount.count : [];
+            setCount(productsCount[0]?.sum || 0)
     }
     getData();
+    
   }
   const Add = async(item:Product) =>
   {
@@ -56,9 +71,17 @@ export default function Cart() {
             });
             const json = await data.json();
             const products = Array.isArray(json.cart) ? json.cart : [];
-            setCartItem(products)
+            await setCartItem(products)
+            
+            const resultCount = await fetch("http://localhost:3001/api/cart/count",{
+                credentials: "include"
+            });
+            const jsonCount = await resultCount.json();
+            const productsCount = Array.isArray(jsonCount.count) ? jsonCount.count : [];
+            setCount(productsCount[0]?.sum || 0)
     }
     getData();
+     
   }
   const Delete = async(item:Product) =>
   {
@@ -71,9 +94,17 @@ export default function Cart() {
             });
             const json = await data.json();
             const products = Array.isArray(json.cart) ? json.cart : [];
-            setCartItem(products)
+            await setCartItem(products)
+
+            const resultCount = await fetch("http://localhost:3001/api/cart/count",{
+                credentials: "include"
+            });
+            const jsonCount = await resultCount.json();
+            const productsCount = Array.isArray(jsonCount.count) ? jsonCount.count : [];
+            setCount(productsCount[0]?.sum || 0)
     }
     getData();
+     
   }
 
   const CheckSession = () =>
@@ -165,7 +196,7 @@ const CheckSessionContact = () =>
          }
        }} />
                <button onClick={CheckSession}>Account</button>
-               <button onClick ={CheckSessionCart}>Cart(0)</button>
+               <button onClick ={CheckSessionCart}>Cart({count})</button>
              </div>
            </header>
     
