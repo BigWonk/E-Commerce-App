@@ -18,12 +18,12 @@ router.get("/all", async(req,res) =>
     }
 })
 
-router.get("/:id", async(req,res) =>
+router.get("/:name", async(req,res) =>
 {
     try 
     {
-        const id = req.params.id;
-        const result = await pool.query("SELECT * FROM products WHERE id = $1", [id])
+        const name = req.params.name;
+        const result = await pool.query("SELECT * FROM products WHERE name ILIKE $1", [`%${name}%`])
         res.status(200).json({product: result.rows})
         
     } 

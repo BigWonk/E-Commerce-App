@@ -3,6 +3,7 @@ import "./Account.css";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Account() {
+  const [userName,setuserName ] = useState("")
   const [name,setName ] = useState("")
   const [email,setEmail ] = useState("")
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ export default function Account() {
         credentials: "include",
     });
         const user = await res.json();
-        setName(user.name)
+        setuserName(user.name)
         setEmail(user.email)
     }
     dataFetch();
@@ -64,36 +65,64 @@ const CheckSessionContact = () =>
       }
     }
     checkAuth();
+  }
+  const CheckSessionCart = () =>
+{
+    const checkAuth = async () => {
+      const data = await fetch("http://localhost:3001/api/auth/verify",
+        {
+          credentials: "include"
+        }
+      )
+      if(data.status === 401)
+      {
+        navigate("/login")
+      }
+      else
+      {
+        navigate("/cart")
+      }
+    }
+    checkAuth();
 }
+  const handleSearch = async() =>
+  {
+      navigate(`/store?search=${encodeURIComponent(name)}`)
+  }
     
     return (
    <div>
-    <header className="navbar">
-           <div className="logo">YourLogo</div>
-           <nav>
-             <ul>
-               <li><a href="/">Home</a></li>
-               <li><a href="#">Shop</a></li>
-               <li><a href="/about">About Us</a></li>
-               <li>
-               <Link to="/contacts" onClick={CheckSessionContact}>
-               Contact
-               </Link>
-              </li>
-             </ul>
-           </nav>
-           <div className="search-account-cart">
-             <input type="text" placeholder="Search products..." className="InputText" />
-             <button onClick={CheckSession}>Account</button>
-             <button>Cart(0)</button>
-           </div>
-         </header>
+  <header className="navbar">
+          <div className="logo">YourLogo</div>
+          <nav>
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/store">Shop</a></li>
+              <li><a href="/about">About Us</a></li>
+              <li>
+              <Link to="/contacts" onClick={CheckSessionContact}>
+              Contact
+              </Link>
+             </li>
+            </ul>
+          </nav>
+          <div className="search-account-cart">
+            <input type="text" placeholder="Search products..." className="InputText" value ={name} onChange = {(e) => setName(e.target.value)} onKeyDown={(e) => {
+        if (e.key === "Enter") {
+        handleSearch();
+      }
+    }} />
+            <button onClick={CheckSession}>Account</button>
+            <button onClick ={CheckSessionCart}>Cart(0)</button>
+          </div>
+        </header>
+  
    <div className="account-container">
       <div className="account-box">
 
         <div className="account-header">
         
-          <h2>{name}</h2>
+          <h2>{userName}</h2>
           <p>{email}</p>
         </div>
 
@@ -102,7 +131,7 @@ const CheckSessionContact = () =>
 
           <div className="info-row">
             <span>Name:</span>
-            <span>{name}</span>
+            <span>{userName}</span>
           </div>
 
           <div className="info-row">

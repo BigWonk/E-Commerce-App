@@ -93,25 +93,27 @@ router.get("/getOrders", protect, async (req,res) =>
 router.get("/getItems", protect, async (req,res) =>
 {
     const userId = req.user.id;
-    const result = [];
 
     try 
     {
-        const order = await pool.query("SELECT * FROM orders WHERE user_id = $1", [userId])
+        const order = await pool.query("SELECT id FROM orders WHERE user_id = $1", [userId])
         const orderItems = order.rows;
 
         if(orderItems.length === 0 )
         {
-            res.status(404).json({message: `You haven't made any orders!`})
-        }
-        for(const items of orderItems)
-        {
-            const results = await pool.query("SELECT * FROM order_items WHERE order_id = $1", [items.id])
-            result.push(...results.rows)
+            return res.status(404).json({message: `You haven't made any orders!`})
         }
 
-            
-        res.status(200).json({items: result})
+        const orderIds = orderItems.map((order) => order.id)
+        const results = await pool.query(
+            `SELECT oi.order_id, oi.product_id, oi.quantity, p.name AS product_name, p.price
+             FROM order_items oi
+             JOIN products p ON oi.product_id = p.id
+             WHERE oi.order_id = ANY($1::int[])`,
+            [orderIds]
+        )
+
+        res.status(200).json({items: results.rows})
 
     } 
     catch (error) 

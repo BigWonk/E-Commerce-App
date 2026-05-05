@@ -19,6 +19,8 @@ export default function Orders() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const [name, setName] = useState("");
+
   const navigate = useNavigate();
   useEffect(() =>
     {
@@ -47,7 +49,8 @@ export default function Orders() {
     }
     getData();
     }, [])
-    const CheckSession = () =>
+    
+const CheckSession = () =>
 {
     const checkAuth = async () => {
       const data = await fetch("http://localhost:3001/api/auth/verify",
@@ -84,32 +87,60 @@ const CheckSessionContact = () =>
       }
     }
     checkAuth();
+  }
+  const CheckSessionCart = () =>
+{
+    const checkAuth = async () => {
+      const data = await fetch("http://localhost:3001/api/auth/verify",
+        {
+          credentials: "include"
+        }
+      )
+      if(data.status === 401)
+      {
+        navigate("/login")
+      }
+      else
+      {
+        navigate("/cart")
+      }
+    }
+    checkAuth();
 }
+  const handleSearch = async() =>
+  {
+      navigate(`/store?search=${encodeURIComponent(name)}`)
+  }
+
   
 
     
   return (
     <div>
     <header className="navbar">
-           <div className="logo">YourLogo</div>
-           <nav>
-             <ul>
-               <li><a href="/">Home</a></li>
-               <li><a href="#">Shop</a></li>
-               <li><a href="/about">About Us</a></li>
-               <li>
-               <Link to="/contacts" onClick={CheckSessionContact}>
-               Contact
-               </Link>
-              </li>
-             </ul>
-           </nav>
-           <div className="search-account-cart">
-             <input type="text" placeholder="Search products..." className="InputText" />
-             <button onClick={CheckSession}>Account</button>
-             <button>Cart(0)</button>
-           </div>
-         </header>
+              <div className="logo">YourLogo</div>
+              <nav>
+                <ul>
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/store">Shop</a></li>
+                  <li><a href="/about">About Us</a></li>
+                  <li>
+                  <Link to="/contacts" onClick={CheckSessionContact}>
+                  Contact
+                  </Link>
+                 </li>
+                </ul>
+              </nav>
+              <div className="search-account-cart">
+                <input type="text" placeholder="Search products..." className="InputText" value ={name} onChange = {(e) => setName(e.target.value)} onKeyDown={(e) => {
+            if (e.key === "Enter") {
+            handleSearch();
+          }
+        }} />
+                <button onClick={CheckSession}>Account</button>
+                <button onClick ={CheckSessionCart}>Cart(0)</button>
+              </div>
+            </header>
     <div className="orders-container">
       <h2>Your Orders</h2>
       <h2>{errorMessage}</h2>
@@ -118,14 +149,14 @@ const CheckSessionContact = () =>
         {orders.map((order, index) => (
           <div key={index} className="order-card">
             <div className="order-header">
-              <span>Order #{order.id}</span>
+              <span>Order #{index + 1}</span>
               <span>{order.created_at}</span>
             </div>
 
             <div className="order-items">
               {items.filter(itms => itms.order_id === order.id ).map((item, index) => (
                 <div key={index} className="order-item">
-                  <span>{item.product_id}</span>
+                  <span>{item.product_name}</span>
                   <span>x{item.quantity}</span>
                 </div>
               ))}

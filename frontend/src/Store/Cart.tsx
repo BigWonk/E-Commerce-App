@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Cart.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 interface Product {
   id?: string;
   name: string;
@@ -13,6 +13,7 @@ interface Product {
 export default function Cart() {
   const [cartItem, setCartItem] = useState<Product[]>([]);
   const navigate = useNavigate();
+  const [name, setName] = useState("");  
   useEffect(() => {
     
     const getData = async () =>
@@ -74,11 +75,102 @@ export default function Cart() {
     }
     getData();
   }
+
+  const CheckSession = () =>
+{
+    const checkAuth = async () => {
+      const data = await fetch("http://localhost:3001/api/auth/verify",
+        {
+          credentials: "include"
+        }
+      )
+      if(data.status === 401)
+      {
+        navigate("/login")
+      }
+      else
+      {
+        navigate("/account")
+      }
+    }
+    checkAuth();
+}
+const CheckSessionContact = () =>
+{
+    const checkAuth = async () => {
+      const data = await fetch("http://localhost:3001/api/auth/verify",
+        {
+          credentials: "include"
+        }
+      )
+      if(data.status === 401)
+      {
+        navigate("/login")
+      }
+      else
+      {
+        navigate("/contacts")
+      }
+    }
+    checkAuth();
+  }
+  const CheckSessionCart = () =>
+{
+    const checkAuth = async () => {
+      const data = await fetch("http://localhost:3001/api/auth/verify",
+        {
+          credentials: "include"
+        }
+      )
+      if(data.status === 401)
+      {
+        navigate("/login")
+      }
+      else
+      {
+        navigate("/cart")
+      }
+    }
+    checkAuth();
+}
+  const handleSearch = async() =>
+  {
+      navigate(`/store?search=${encodeURIComponent(name)}`)
+  }
+
+
   
   const total = cartItem.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   return (
+    <div>
+       <header className="navbar">
+             <div className="logo">YourLogo</div>
+             <nav>
+               <ul>
+                 <li><a href="/">Home</a></li>
+                 <li><a href="/store">Shop</a></li>
+                 <li><a href="/about">About Us</a></li>
+                 <li>
+                 <Link to="/contacts" onClick={CheckSessionContact}>
+                 Contact
+                 </Link>
+                </li>
+               </ul>
+             </nav>
+             <div className="search-account-cart">
+               <input type="text" placeholder="Search products..." className="InputText" value ={name} onChange = {(e) => setName(e.target.value)} onKeyDown={(e) => {
+           if (e.key === "Enter") {
+           handleSearch();
+         }
+       }} />
+               <button onClick={CheckSession}>Account</button>
+               <button onClick ={CheckSessionCart}>Cart(0)</button>
+             </div>
+           </header>
+    
     <div className="cart-container">
+      
       <h1>Your Cart</h1>
 
       <div className="cart-content">
@@ -115,6 +207,7 @@ export default function Cart() {
           <button className="checkout-btn" onClick={() =>navigate("/checkout") }>Checkout</button>
         </div>
       </div>
+    </div>
     </div>
   );
 }

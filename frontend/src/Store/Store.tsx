@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Store.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 interface Product {
   id?: string;
@@ -17,15 +17,33 @@ export default function Store() {
 
   const [items, setItems] = useState<Product[]>([]);
   const [count, setCount] = useState(0);
+  const [name, setName] = useState("");
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get("search");
+  
   useEffect(() =>{
     const getData = async() =>
     {
-        const data = await fetch("http://localhost:3001/api/products/all",{
+      const search = searchParams.get("search");
+      if(!search)
+      {
+      const data = await fetch("http://localhost:3001/api/products/all",{
             credentials: "include"
         })
         const json = await data.json();
         const products = Array.isArray(json.product) ? json.product : [];
         setItems(products);
+      }
+      else
+      {
+        console.log(search)
+        const data = await fetch(`http://localhost:3001/api/products/${search}`,{
+            credentials: "include"
+        })
+        const json = await data.json();
+        const products = Array.isArray(json.product) ? json.product : [];
+        setItems(products);
+      }
     }
     getData();
   },[])
@@ -91,29 +109,59 @@ const CheckSessionContact = () =>
       }
     }
     checkAuth();
+  }
+  const CheckSessionCart = () =>
+{
+    const checkAuth = async () => {
+      const data = await fetch("http://localhost:3001/api/auth/verify",
+        {
+          credentials: "include"
+        }
+      )
+      if(data.status === 401)
+      {
+        navigate("/login")
+      }
+      else
+      {
+        navigate("/cart")
+      }
+    }
+    checkAuth();
 }
+  const handleSearch = async() =>
+  {
+      
+    navigate(`/store?search=${encodeURIComponent(name)}`)
+    location.reload();
+  }
+
   return (
    <div>
-    <header className="navbar">
-        <div className="logo">YourLogo</div>
-        <nav>
-          <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/store">Shop</a></li>
-            <li><a href="/about">About Us</a></li>
-            <li>
-            <Link to="/contacts" onClick={CheckSessionContact}>
-            Contact
-            </Link>
-           </li>
-          </ul>
-        </nav>
-        <div className="search-account-cart">
-          <input type="text" placeholder="Search products..." className="InputText" />
-          <button onClick={CheckSession}>Account</button>
-          <button>Cart({count})</button>
-        </div>
-      </header>
+      <header className="navbar">
+             <div className="logo">YourLogo</div>
+             <nav>
+               <ul>
+                 <li><a href="/">Home</a></li>
+                 <li><a href="/store">Shop</a></li>
+                 <li><a href="/about">About Us</a></li>
+                 <li>
+                 <Link to="/contacts" onClick={CheckSessionContact}>
+                 Contact
+                 </Link>
+                </li>
+               </ul>
+             </nav>
+             <div className="search-account-cart">
+               <input type="text" placeholder="Search products..." className="InputText" value ={name} onChange = {(e) => setName(e.target.value)} onKeyDown={(e) => {
+           if (e.key === "Enter") {
+           handleSearch();
+         }
+       }} />
+               <button onClick={CheckSession}>Account</button>
+               <button onClick ={CheckSessionCart}>Cart({count})</button>
+             </div>
+           </header>
    <div className="store-container">
       <h1>All Products</h1>
 

@@ -3,29 +3,11 @@ import "./HomePage.css"
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-interface Product {
-  id?: string;
-  name: string;
-  price: number;
-  category: string;
-}
-
 export default function HomePage() 
 {
-  const [items, setItems] = useState<Product[]>([]);
+  const [name, setName] = useState("");
   const navigate = useNavigate();
-  useEffect(() =>
-{
-    
-    const fetchData = async() =>
-    {
-        const response = await fetch("http://localhost:3001/api/products/all")
-        const json = await response.json();
-        const products = Array.isArray(json.product) ? json.product : [];
-        setItems(products);
-    }
-    fetchData();
-}, [])
+ 
 const CheckSession = () =>
 {
     const checkAuth = async () => {
@@ -83,6 +65,11 @@ const CheckSessionContact = () =>
     }
     checkAuth();
 }
+  const handleSearch = async() =>
+  {
+      navigate(`/store?search=${encodeURIComponent(name)}`)
+  }
+
 
 
 
@@ -106,7 +93,11 @@ const CheckSessionContact = () =>
           </ul>
         </nav>
         <div className="search-account-cart">
-          <input type="text" placeholder="Search products..." className="InputText" />
+          <input type="text" placeholder="Search products..." className="InputText" value ={name} onChange = {(e) => setName(e.target.value)} onKeyDown={(e) => {
+      if (e.key === "Enter") {
+      handleSearch();
+    }
+  }} />
           <button onClick={CheckSession}>Account</button>
           <button onClick ={CheckSessionCart}>Cart(0)</button>
         </div>
