@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Cart.css";
 import { Link, useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 interface Product {
   id?: string;
   name: string;
@@ -239,6 +240,7 @@ const CheckSessionContact = () =>
         </div>
       </div>
     </div>
+      <Footer />
     </div>
   );
 }

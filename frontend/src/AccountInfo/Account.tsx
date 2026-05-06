@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Account.css";
 import { Link, useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 
 export default function Account() {
   const [userName,setuserName ] = useState("")
@@ -157,6 +158,7 @@ const CheckSessionContact = () =>
 
       </div>
     </div>
+      <Footer />
     </div>
   );
 }

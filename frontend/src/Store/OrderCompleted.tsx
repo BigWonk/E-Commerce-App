@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
-import "./HomePage.css"
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 
-export default function HomePage() 
+export const OrderCompleted = () => 
+  
 {
   const [name, setName] = useState("");
   const [count, setCount] = useState();
+  const [id, setId] = useState();
+
   const navigate = useNavigate();
  
   useEffect(() => {
@@ -19,6 +20,18 @@ export default function HomePage()
             const jsonCount = await resultCount.json();
              const productsCount = Array.isArray(jsonCount.count) ? jsonCount.count : [];
             setCount(productsCount[0]?.sum || 0)
+
+        const resultId = await fetch("http://localhost:3001/api/orders/getOrders",
+            {
+                credentials: "include"
+            })
+            const jsonId = await resultId.json();
+            const productsId = Array.isArray(jsonId.order) ? jsonId.order : [];
+            console.log(productsId.length)
+            setId(productsId[productsId.length - 1]?.id)
+            
+            
+
     }
     data()
   }, [])
@@ -86,15 +99,10 @@ const CheckSessionContact = () =>
   }
 
 
-
-
-  
-  
-    return (
-    <div>
-    <div className="homepage-container">
-     
-      <header className="navbar">
+    return(
+        <div>
+        <div>
+             <header className="navbar">
         <div className="logo">YourLogo</div>
         <nav>
           <ul>
@@ -118,19 +126,13 @@ const CheckSessionContact = () =>
           <button onClick ={CheckSessionCart}>Cart({count})</button>
         </div>
       </header>
-
-     
-      <section className="hero-section">
-        <div className="hero-content">
-          <h1>Discover Our Latest Collections</h1>
-          <p>Find amazing deals on your favorite products.</p>
-          <button className="cta-button" onClick={() => navigate("/store")}>Shop Now</button>
+            <h1>Order succesfully made!</h1>
+            <h2>Id of order: {id}</h2>
+        
+        
         </div>
-      </section>
-    
-    </div>
-      <Footer />
-   </div>
-  );
-}
+          <Footer />
+        </div>
 
+    )
+}

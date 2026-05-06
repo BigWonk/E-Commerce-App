@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import "./HomePage.css"
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import "./InfoPages.css";
 import Footer from "../components/Footer";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function HomePage() 
-{
-  const [name, setName] = useState("");
+export function Careers() {
+  
+   const [name, setName] = useState("");
   const [count, setCount] = useState();
   const navigate = useNavigate();
  
@@ -85,16 +84,10 @@ const CheckSessionContact = () =>
       navigate(`/store?search=${encodeURIComponent(name)}`)
   }
 
-
-
-
-  
   
     return (
     <div>
-    <div className="homepage-container">
-     
-      <header className="navbar">
+        <header className="navbar">
         <div className="logo">YourLogo</div>
         <nav>
           <ul>
@@ -118,19 +111,30 @@ const CheckSessionContact = () =>
           <button onClick ={CheckSessionCart}>Cart({count})</button>
         </div>
       </header>
-
-     
-      <section className="hero-section">
-        <div className="hero-content">
-          <h1>Discover Our Latest Collections</h1>
-          <p>Find amazing deals on your favorite products.</p>
-          <button className="cta-button" onClick={() => navigate("/store")}>Shop Now</button>
-        </div>
-      </section>
+    <div className="info-container">
     
+      <h1>Careers</h1>
+
+      <div className="info-card">
+        <h3>Join Our Team</h3>
+        <p>We are always looking for talented and motivated people.</p>
+      </div>
+
+      <div className="info-card">
+        <h3>Open Positions</h3>
+        <ul>
+          <li>Frontend Developer</li>
+          <li>Backend Developer</li>
+          <li>Customer Support</li>
+        </ul>
+      </div>
+
+      <div className="info-card">
+        <h3>Apply</h3>
+        <p>Send your CV to careers@shopx.com</p>
+      </div>
     </div>
-      <Footer />
-   </div>
+    <Footer />
+    </div>
   );
 }
-

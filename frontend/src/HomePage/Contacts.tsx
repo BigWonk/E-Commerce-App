@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Contacts.css";
 import { Link, useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 
 
 
@@ -158,7 +159,7 @@ const CheckSessionContact = () =>
         <h2>{errorMessage}</h2>
       </div>
     </div>
-   
+    <Footer />
    </div>
   );
 }

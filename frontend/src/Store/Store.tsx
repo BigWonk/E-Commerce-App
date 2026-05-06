@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Store.css";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import Footer from "../components/Footer";
 
 interface Product {
   id?: string;
@@ -187,6 +188,7 @@ const CheckSessionContact = () =>
         ))}
       </div>
     </div>
+      <Footer />
     </div>
   );
 }

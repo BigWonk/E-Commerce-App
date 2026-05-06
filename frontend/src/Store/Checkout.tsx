@@ -34,7 +34,7 @@ export default function Checkout() {
                 });
                 if(data.status === 200)
                 {
-                    navigate("/")
+                    navigate("/orderCompleted")
                 }
                 else
                 {

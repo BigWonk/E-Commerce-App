@@ -10,6 +10,10 @@ import { Contact } from './HomePage/Contacts';
 import Store from './Store/Store';
 import Cart from './Store/Cart';
 import Checkout from './Store/Checkout';
+import { OrderCompleted } from './Store/OrderCompleted';
+import { Careers } from './HomePage/Careers';
+import { Shipping } from './HomePage/Shipping';
+import { FAQ } from './HomePage/FAQ';
 function App() {
   
 
@@ -26,7 +30,10 @@ function App() {
        <Route path='/store' element = {<Store></Store>}></Route> 
        <Route path='/cart' element = {<Cart></Cart>}></Route> 
        <Route path='/checkout' element = {<Checkout></Checkout>}></Route> 
-
+       <Route path='/orderCompleted' element = {<OrderCompleted></OrderCompleted>}></Route> 
+       <Route path='/careers' element = {<Careers></Careers>}></Route> 
+       <Route path='/shipping' element = {<Shipping></Shipping>}></Route> 
+       <Route path='/FAQ' element = {<FAQ></FAQ>}></Route> 
     </Routes>
       
     </BrowserRouter>

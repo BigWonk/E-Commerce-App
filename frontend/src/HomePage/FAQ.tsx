@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import "./HomePage.css"
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import "./InfoPages.css";
 import Footer from "../components/Footer";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function HomePage() 
-{
+export function FAQ() {
+  const faqs = [
+    { q: "How do I place an order?", a: "Browse products, add to cart, and proceed to checkout." },
+    { q: "What payment methods are accepted?", a: "We accept card payments and cash on delivery." },
+    { q: "Can I cancel my order?", a: "Yes, before it is shipped." }
+  ];
   const [name, setName] = useState("");
   const [count, setCount] = useState();
   const navigate = useNavigate();
@@ -85,16 +88,9 @@ const CheckSessionContact = () =>
       navigate(`/store?search=${encodeURIComponent(name)}`)
   }
 
-
-
-
-  
-  
-    return (
+  return (
     <div>
-    <div className="homepage-container">
-     
-      <header className="navbar">
+    <header className="navbar">
         <div className="logo">YourLogo</div>
         <nav>
           <ul>
@@ -118,19 +114,17 @@ const CheckSessionContact = () =>
           <button onClick ={CheckSessionCart}>Cart({count})</button>
         </div>
       </header>
-
-     
-      <section className="hero-section">
-        <div className="hero-content">
-          <h1>Discover Our Latest Collections</h1>
-          <p>Find amazing deals on your favorite products.</p>
-          <button className="cta-button" onClick={() => navigate("/store")}>Shop Now</button>
+    <div className="info-container">
+      <h1>Frequently Asked Questions</h1>
+      {faqs.map((item, i) => (
+        <div key={i} className="info-card">
+          <h3>{item.q}</h3>
+          <p>{item.a}</p>
         </div>
-      </section>
-    
+      ))}
+      
     </div>
       <Footer />
-   </div>
+    </div>
   );
 }
-

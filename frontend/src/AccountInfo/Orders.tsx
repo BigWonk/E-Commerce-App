@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Orders.css";
 import { Link, useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 type Order = 
 {
     id:Number,
@@ -178,6 +179,7 @@ const CheckSessionContact = () =>
       </div>
         <button  className = "btn" onClick={() => navigate("/account")}>Back</button>
     </div>
+      <Footer />
     </div>
   );
 }

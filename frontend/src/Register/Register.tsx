@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Register.css";
 import { useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 
 export default function Register() {
   const [name, setName] = useState("");
